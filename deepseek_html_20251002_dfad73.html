@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XPay Dashboard</title>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(to bottom right, #111827, #000, #111827);
+            color: white;
+            min-height: 100vh;
+        }
+
+        /* Layout */
+        .min-h-screen { min-height: 100vh; }
+        .flex { display: flex; }
+        .items-center { align-items: center; }
+        .justify-center { justify-content: center; }
+        .justify-between { justify-content: space-between; }
+        .flex-1 { flex: 1; }
+        .flex-col { flex-direction: column; }
+        
+        /* Spacing */
+        .p-4 { padding: 1rem; }
+        .p-6 { padding: 1.5rem; }
+        .p-8 { padding: 2rem; }
+        .px-4 { padding-left: 1rem; padding-right: 1rem; }
+        .py-3 { padding-top: 0.75rem; padding-bottom: 0.75rem; }
+        .px-3 { padding-left: 0.75rem; padding-right: 0.75rem; }
+        .py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+        .px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
+        .py-4 { padding-top: 1rem; padding-bottom: 1rem; }
+        .m-0 { margin: 0; }
+        .mb-2 { margin-bottom: 0.5rem; }
+        .mb-3 { margin-bottom: 0.75rem; }
+        .mb-4 { margin-bottom: 1rem; }
+        .mb-6 { margin-bottom: 1.5rem; }
+        .mb-8 { margin-bottom: 2rem; }
+        .mt-1 { margin-top: 0.25rem; }
+        .mt-4 { margin-top: 1rem; }
+        .mt-6 { margin-top: 1.5rem; }
+        .mr-2 { margin-right: 0.5rem; }
+        
+        /* Sizing */
+        .w-full { width: 100%; }
+        .w-64 { width: 16rem; }
+        .w-20 { width: 5rem; }
+        .w-24 { width: 6rem; }
+        .h-24 { height: 6rem; }
+        .max-w-md { max-width: 28rem; }
+        
+        /* Colors */
+        .bg-gray-800 { background-color: #1f2937; }
+        .bg-gray-700 { background-color: #374151; }
+        .bg-gray-750 { background-color: #2d3748; }
+        .bg-blue-600 { background-color: #2563eb; }
+        .bg-blue-700 { background-color: #1d4ed8; }
+        .bg-purple-600 { background-color: #9333ea; }
+        .bg-purple-700 { background-color: #7e22ce; }
+        .bg-green-600 { background-color: #16a34a; }
+        .bg-green-700 { background-color: #15803d; }
+        .bg-red-600 { background-color: #dc2626; }
+        .bg-red-700 { background-color: #b91c1c; }
+        .bg-yellow-500 { background-color: #f59e0b; }
+        
+        /* Text */
+        .text-white { color: white; }
+        .text-gray-300 { color: #d1d5db; }
+        .text-gray-400 { color: #9ca3af; }
+        .text-gray-500 { color: #6b7280; }
+        .text-blue-400 { color: #60a5fa; }
+        .text-green-300 { color: #86efac; }
+        .text-green-400 { color: #4ade80; }
+        .text-yellow-300 { color: #fde047; }
+        .text-red-300 { color: #fca5a5; }
+        .text-purple-300 { color: #d8b4fe; }
+        .text-yellow-500 { color: #f59e0b; }
+        .text-red-400 { color: #f87171; }
+        
+        .text-xs { font-size: 0.75rem; }
+        .text-sm { font-size: 0.875rem; }
+        .text-lg { font-size: 1.125rem; }
+        .text-xl { font-size: 1.25rem; }
+        .text-2xl { font-size: 1.5rem; }
+        .text-4xl { font-size: 2.25rem; }
+        
+        .font-medium { font-weight: 500; }
+        .font-semibold { font-weight: 600; }
+        .font-bold { font-weight: 700; }
+        
+        .text-center { text-align: center; }
+        .text-left { text-align: left; }
+        .uppercase { text-transform: uppercase; }
+        .tracking-wider { letter-spacing: 0.05em; }
+        .font-mono { font-family: monospace; }
+        
+        /* Borders */
+        .border { border: 1px solid; }
+        .border-2 { border: 2px solid; }
+        .border-r { border-right: 1px solid; }
+        .border-b { border-bottom: 1px solid; }
+        .border-gray-600 { border-color: #4b5563; }
+        .border-gray-700 { border-color: #374151; }
+        .border-blue-700 { border-color: #1d4ed8; }
+        .border-yellow-500 { border-color: #f59e0b; }
+        .border-dashed { border-style: dashed; }
+        
+        /* Backgrounds */
+        .bg-gradient-to-br { background: linear-gradient(to bottom right, #111827, #000, #111827); }
+        .from-green-600 { background: linear-gradient(135deg, #059669, #047857); }
+        .from-yellow-600 { background: linear-gradient(135deg, #d97706, #b45309); }
+        .from-red-600 { background: linear-gradient(135deg, #dc2626, #b91c1c); }
+        .from-blue-600 { background: linear-gradient(135deg, #2563eb, #1d4ed8); }
+        .from-emerald-600 { background: linear-gradient(135deg, #059669, #047857); }
+        .from-indigo-600 { background: linear-gradient(135deg, #4f46e5, #4338ca); }
+        .from-teal-600 { background: linear-gradient(135deg, #0d9488, #0f766e); }
+        .from-orange-600 { background: linear-gradient(135deg, #ea580c, #c2410c); }
+        .from-purple-600 { background: linear-gradient(135deg, #9333ea, #7e22ce); }
+        .from-blue-500 { background: linear-gradient(135deg, #3b82f6, #9333ea); }
+        
+        .bg-yellow-500\/10 { background-color: rgba(245, 158, 11, 0.1); }
+        .bg-blue-900\/20 { background-color: rgba(30, 58, 138, 0.2); }
+        .bg-red-900\/20 { background-color: rgba(127, 29, 29, 0.2); }
+        .bg-green-900 { background-color: #14532d; }
+        .bg-yellow-900 { background-color: #713f12; }
+        .bg-red-900 { background-color: #7f1d1d; }
+        .bg-purple-900 { background-color: #581c87; }
+        
+        /* Effects */
+        .shadow-2xl { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); }
+        .shadow-lg { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
+        .rounded-lg { border-radius: 0.5rem; }
+        .rounded-xl { border-radius: 0.75rem; }
+        .rounded-2xl { border-radius: 1rem; }
+        .rounded-full { border-radius: 9999px; }
+        .opacity-80 { opacity: 0.8; }
+        
+        /* Layout */
+        .grid { display: grid; }
+        .grid-cols-1 { grid-template-columns: 1fr; }
+        .grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
+        .grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
+        .gap-2 { gap: 0.5rem; }
+        .gap-3 { gap: 0.75rem; }
+        .gap-4 { gap: 1rem; }
+        .gap-6 { gap: 1.5rem; }
+        
+        /* Interactive */
+        .cursor-pointer { cursor: pointer; }
+        .transition-all { transition: all 0.3s ease; }
+        .transition-colors { transition: background-color 0.3s ease, color 0.3s ease; }
+        .duration-300 { transition-duration: 300ms; }
+        
+        .hover\:bg-blue-700:hover { background-color: #1d4ed8; }
+        .hover\:bg-purple-700:hover { background-color: #7e22ce; }
+        .hover\:bg-green-700:hover { background-color: #15803d; }
+        .hover\:bg-gray-700:hover { background-color: #374151; }
+        .hover\:bg-gray-600:hover { background-color: #4b5563; }
+        .hover\:bg-gray-750:hover { background-color: #2d3748; }
+        .hover\:bg-red-900\/20:hover { background-color: rgba(127, 29, 29, 0.2); }
+        .hover\:text-white:hover { color: white; }
+        
+        /* Focus states */
+        input:focus, select:focus, button:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+        }
+        
+        /* Utilities */
+        .overflow-auto { overflow: auto; }
+        .overflow-x-auto { overflow-x: auto; }
+        .overflow-y-auto { overflow-y: auto; }
+        .relative { position: relative; }
+        .absolute { position: absolute; }
+        .fixed { position: fixed; }
+        .inset-0 { top: 0; right: 0; bottom: 0; left: 0; }
+        .bottom-4 { bottom: 1rem; }
+        .left-4 { left: 1rem; }
+        .right-4 { right: 1rem; }
+        .z-50 { z-index: 50; }
+        
+        /* Hide/show */
+        .hidden { display: none; }
+        .block { display: block; }
+        
+        /* Table specific */
+        table { border-collapse: collapse; width: 100%; }
+        th, td { padding: 0.75rem 1rem; text-align: left; }
+        thead { background-color: #374151; }
+        tbody tr { border-bottom: 1px solid #374151; }
+        tbody tr:hover { background-color: #2d3748; }
+        
+        /* Sidebar text hide/show */
+        .sidebar-text { transition: opacity 0.3s ease; }
+        .sidebar-collapsed .sidebar-text {
+            opacity: 0;
+            width: 0;
+            overflow: hidden;
+        }
+        
+        /* Responsive */
+        @media (min-width: 768px) {
+            .md\:grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
+            .md\:grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
+            .md\:grid-cols-5 { grid-template-columns: repeat(5, 1fr); }
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #1f2937; }
+        ::-webkit-scrollbar-thumb { background: #4b5563; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #6b7280; }
+        
+        /* Transaction details modal */
+        .transaction-details-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        
+        .transaction-detail-item {
+            background: #374151;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            border: 1px solid #4b5563;
+        }
+        
+        .transaction-detail-label {
+            font-size: 0.75rem;
+            color: #9ca3af;
+            margin-bottom: 0.25rem;
+        }
+        
+        .transaction-detail-value {
+            font-size: 0.875rem;
+            color: white;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <!-- Login Screen -->
+        <div id="login-screen" class="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 flex items-center justify-center p-4">
+            <div class="bg-gray-800 rounded-2xl shadow-2xl p-8 w-full max-w-md border border-gray-700">
+                <div class="text-center mb-8">
+                    <h1 class="text-4xl font-bold text-white mb-2">X支付</h1>
+                    <p class="text-gray-400">Admin Dashboard Login</p>
+                </div>
+                <div class="space-y-6">
+                    <div>
+                        <label class="block text-gray-300 mb-2 text-sm font-medium">Username</label>
+                        <input type="text" id="username" class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder:text-gray-400" placeholder="Enter username">
+                    </div>
+                    <div>
+                        <label class="block text-gray-300 mb-2 text-sm font-medium">Password</label>
+                        <input type="password" id="password" class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder:text-gray-400" placeholder="Enter password">
+                    </div>
+                    <button id="login-btn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition-colors duration-200">
+                        Login
+                    </button>
+                    <div class="text-center text-xs text-gray-500 mt-4">
+                        Demo: admin / xpay2024
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard -->
+        <div id="dashboard" class="hidden min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 flex">
+            <!-- Sidebar -->
+            <div id="sidebar" class="w-64 bg-gray-800 border-r border-gray-700 transition-all duration-300 relative">
+                <div class="p-6 border-b border-gray-700 flex items-center justify-between">
+                    <h1 class="text-2xl font-bold text-white sidebar-text">X支付</h1>
+                    <button id="sidebar-toggle" class="text-gray-400 hover:text-white">
+                        <i data-lucide="menu"></i>
+                    </button>
+                </div>
+                
+                <nav class="p-4 space-y-2">
+                    <button data-page="home" class="w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors bg-blue-600 text-white">
+                        <i data-lucide="home"></i>
+                        <span class="sidebar-text">Home</span>
+                    </button>
+                    <button data-page="apk" class="w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors text-gray-400 hover:bg-gray-700 hover:text-white">
+                        <i data-lucide="users"></i>
+                        <span class="sidebar-text">APK Connections</span>
+                    </button>
+                    <button data-page="dmr" class="w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors text-gray-400 hover:bg-gray-700 hover:text-white">
+                        <i data-lucide="file-text"></i>
+                        <span class="sidebar-text">DMR Report</span>
+                    </button>
+                    <button data-page="withdrawals" class="w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors text-gray-400 hover:bg-gray-700 hover:text-white">
+                        <i data-lucide="dollar-sign"></i>
+                        <span class="sidebar-text">Withdrawals</span>
+                    </button>
+                    <button data-page="profile" class="w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors text-gray-400 hover:bg-gray-700 hover:text-white">
+                        <i data-lucide="user"></i>
+                        <span class="sidebar-text">Profile</span>
+                    </button>
+                </nav>
+
+                <div class="absolute bottom-4 left-4 right-4">
+                    <button id="logout-btn" class="w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-red-400 hover:bg-red-900/20 transition-colors">
+                        <i data-lucide="log-out"></i>
+                        <span class="sidebar-text">Logout</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="flex-1 overflow-auto">
+                <div class="p-8">
+                    <div id="home-page" class="page-content"></div>
+                    <div id="apk-page" class="page-content hidden"></div>
+                    <div id="dmr-page" class="page-content hidden"></div>
+                    <div id="withdrawals-page" class="page-content hidden"></div>
+                    <div id="profile-page" class="page-content hidden"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Transaction Details Modal -->
+        <div id="transaction-modal" class="fixed inset-0 bg-black/60 flex items-center justify-center z-50 hidden">
+            <div class="bg-gray-800 rounded-xl p-6 w-full max-w-2xl border border-gray-700">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-xl font-bold text-white">Transaction Details</h3>
+                    <button id="close-transaction-modal" class="text-gray-400 hover:text-white">
+                        <i data-lucide="x"></i>
+                    </button>
+                </div>
+                <div id="transaction-details-content" class="space-y-4">
+                    <!-- Transaction details will be populated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Your exact data and logic converted to vanilla JS
+        const state = {
+            isLoggedIn: false,
+            currentPage: 'home',
+            loginForm: { username: '', password: '' },
+            sidebarOpen: true,
+            showAddAccount: false,
+            showBulkAdd: false,
+            showWithdrawRequest: false,
+            newAccount: { userId: '', bank: '', accountNumber: '', ifsc: '' },
+            withdrawRequest: { usdtWallet: '', amount: '' },
+            validCredentials: { username: 'admin', password: 'xpay2024' },
+            accounts: [
+                { id: 1, userId: 'USER001', bank: 'ICICI Bank', status: 'verified', addedDate: 'Today', accountNumber: '****4521', running: true },
+                { id: 2, userId: 'USER002', bank: 'HDFC Bank', status: 'pending', addedDate: 'Today', accountNumber: '****7892', running: false },
+                { id: 3, userId: 'USER003', bank: 'SBI', status: 'pending', addedDate: 'Today', accountNumber: '****3456', running: false },
+                { id: 4, userId: 'USER004', bank: 'Axis Bank', status: 'verified', addedDate: '2024-09-30', accountNumber: '****9087', running: true },
+                { id: 5, userId: 'USER005', bank: 'Kotak', status: 'rejected', addedDate: '2024-10-01', accountNumber: '****6543', running: false },
+            ],
+            apkUsers: [
+                { id: 1, userId: 'USER001', connected: true, isTeam: false, lastActive: '2 mins ago', linkedAccount: 1 },
+                { id: 2, userId: 'USER006', connected: true, isTeam: true, lastActive: '5 mins ago', linkedAccount: null },
+                { id: 3, userId: 'USER007', connected: true, isTeam: false, lastActive: '10 mins ago', linkedAccount: 4 },
+                { id: 4, userId: 'USER008', connected: false, isTeam: false, lastActive: '2 hours ago', linkedAccount: null },
+                { id: 5, userId: 'USER009', connected: true, isTeam: true, lastActive: '1 min ago', linkedAccount: null },
+            ],
+            transactions: [
+                { id: 1, userId: 'USER001', bank: 'ICICI Bank', amount: 50000, type: 'DMR', creditDebit: 'Credit', source: 'NEFT', mqr: 'With MQR', status: 'completed', date: 'Today 10:30 AM', txnId: 'TXN001234' },
+                { id: 2, userId: 'USER004', bank: 'Axis Bank', amount: 75000, type: 'DMR', creditDebit: 'Debit', source: 'RTGS', mqr: 'Without MQR', status: 'completed', date: 'Today 09:15 AM', txnId: 'TXN001235' },
+                { id: 3, userId: 'USER001', bank: 'ICICI Bank', amount: 30000, type: 'DMR', creditDebit: 'Credit', source: 'IMPS', mqr: 'With MQR', status: 'pending', date: 'Today 08:45 AM', txnId: 'TXN001236' },
+                { id: 4, userId: 'USER004', bank: 'Axis Bank', amount: 100000, type: 'DMR', creditDebit: 'Credit', source: 'NEFT', mqr: 'Without MQR', status: 'completed', date: 'Yesterday 05:20 PM', txnId: 'TXN001237' },
+                { id: 5, userId: 'USER007', bank: 'HDFC Bank', amount: 45000, type: 'DMR', creditDebit: 'Debit', source: 'UPI', mqr: 'With MQR', status: 'completed', date: 'Today 11:20 AM', txnId: 'TXN001238' },
+            ],
+            withdrawals: [
+                { id: 1, userId: 'USER001', amount: 5000, commission: 250, status: 'pending', date: 'Today' },
+                { id: 2, userId: 'USER003', amount: 3000, commission: 150, status: 'completed', date: '2024-10-01' },
+                { id: 3, userId: 'USER007', amount: 8000, commission: 400, status: 'pending', date: 'Today' },
+                { id: 4, userId: 'USER002', amount: 2000, commission: 100, status: 'completed', date: '2024-09-30' },
+            ],
+            withdrawalBalance: 500000
+        };
+
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // DOM Elements
+        const loginScreen = document.getElementById('login-screen');
+        const dashboard = document.getElementById('dashboard');
+        const usernameInput = document.getElementById('username');
+        const passwordInput = document.getElementById('password');
+        const loginBtn = document.getElementById('login-btn');
+        const logoutBtn = document.getElementById('logout-btn');
+        const sidebarToggle = document.getElementById('sidebar-toggle');
+        const sidebar = document.getElementById('sidebar');
+        const pageButtons = document.querySelectorAll('[data-page]');
+        const transactionModal = document.getElementById('transaction-modal');
+        const closeTransactionModal = document.getElementById('close-transaction-modal');
+
+        // Event Listeners
+        loginBtn.addEventListener('click', handleLogin);
+        logoutBtn.addEventListener('click', handleLogout);
+        sidebarToggle.addEventListener('click', toggleSidebar);
+        closeTransactionModal.addEventListener('click', () => {
+            transactionModal.classList.add('hidden');
+        });
+        
+        pageButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const page = button.getAttribute('data-page');
+                setCurrentPage(page);
+            });
+        });
+
+        usernameInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') handleLogin();
+        });
+        
+        passwordInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') handleLogin();
+        });
+
+        // Functions
+        function handleLogin() {
+            const username = usernameInput.value;
+            const password = passwordInput.value;
+            
+            if (username === state.validCredentials.username && 
+                password === state.validCredentials.password) {
+                state.isLoggedIn = true;
+                loginScreen.classList.add('hidden');
+                dashboard.classList.remove('hidden');
+                renderCurrentPage();
+            } else {
+                alert('Invalid credentials! Use username: admin, password: xpay2024');
+            }
+        }
+
+        function handleLogout() {
+            state.isLoggedIn = false;
+            dashboard.classList.add('hidden');
+            loginScreen.classList.remove('hidden');
+            usernameInput.value = '';
+            passwordInput.value = '';
+        }
+
+        function toggleSidebar() {
+            state.sidebarOpen = !state.sidebarOpen;
+            if (state.sidebarOpen) {
+                sidebar.classList.remove('w-20', 'sidebar-collapsed');
+                sidebar.classList.add('w-64');
+            } else {
+                sidebar.classList.remove('w-64');
+                sidebar.classList.add('w-20', 'sidebar-collapsed');
+            }
+            setTimeout(() => lucide.createIcons(), 300);
+        }
+
+        function setCurrentPage(page) {
+            state.currentPage = page;
+            
+            pageButtons.forEach(button => {
+                if (button.getAttribute('data-page') === page) {
+                    button.classList.add('bg-blue-600', 'text-white');
+                    button.classList.remove('text-gray-400', 'hover:bg-gray-700', 'hover:text-white');
+                } else {
+                    button.classList.remove('bg-blue-600', 'text-white');
+                    button.classList.add('text-gray-400', 'hover:bg-gray-700', 'hover:text-white');
+                }
+            });
+            
+            renderCurrentPage();
+        }
+
+        function renderCurrentPage() {
+            document.querySelectorAll('.page-content').forEach(page => page.classList.add('hidden'));
+            const currentPageElement = document.getElementById(`${state.currentPage}-page`);
+            currentPageElement.classList.remove('hidden');
+            
+            switch(state.currentPage) {
+                case 'home':
+                    renderHome();
+                    break;
+                case 'apk':
+                    renderAPKConnections();
+                    break;
+                case 'dmr':
+                    renderDMRReport();
+                    break;
+                case 'withdrawals':
+                    renderWithdrawals();
+                    break;
+                case 'profile':
+                    renderProfiler();
+                    break;
+            }
+            
+            setTimeout(() => lucide.createIcons(), 0);
+        }
+
+        function showTransactionDetails(transaction) {
+            const content = document.getElementById('transaction-details-content');
+            content.innerHTML = `
+                <div class="transaction-details-grid">
+                    <div class="transaction-detail-item">
+                        <div class="transaction-detail-label">Transaction ID</div>
+                        <div class="transaction-detail-value font-mono">${transaction.txnId}</div>
+                    </div>
+                    <div class="transaction-detail-item">
+                        <div class="transaction-detail-label">User ID</div>
+                        <div class="transaction-detail-value">${transaction.userId}</div>
+                    </div>
+                    <div class="transaction-detail-item">
+                        <div class="transaction-detail-label">Bank</div>
+                        <div class="transaction-detail-value">${transaction.bank}</div>
+                    </div>
+                    <div class="transaction-detail-item">
+                        <div class="transaction-detail-label">Amount</div>
+                        <div class="transaction-detail-value text-blue-400">₹${transaction.amount.toLocaleString()}</div>
+                    </div>
+                    <div class="transaction-detail-item">
+                        <div class="transaction-detail-label">Type</div>
+                        <div class="transaction-detail-value">${transaction.type}</div>
+                    </div>
+                    <div class="transaction-detail-item">
+                        <div class="transaction-detail-label">Credit/Debit</div>
+                        <div class="transaction-detail-value">
+                            <span class="px-2 py-1 rounded-full text-xs font-semibold ${transaction.creditDebit === 'Credit' ? 'bg-green-900 text-green-300' : 'bg-red-900 text-red-300'}">
+                                ${transaction.creditDebit}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="transaction-detail-item">
+                        <div class="transaction-detail-label">Source</div>
+                        <div class="transaction-detail-value">${transaction.source}</div>
+                    </div>
+                    <div class="transaction-detail-item">
+                        <div class="transaction-detail-label">MQR Status</div>
+                        <div class="transaction-detail-value">
+                            <span class="px-2 py-1 rounded-full text-xs font-semibold ${transaction.mqr === 'With MQR' ? 'bg-purple-900 text-purple-300' : 'bg-gray-700 text-gray-300'}">
+                                ${transaction.mqr}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="transaction-detail-item">
+                        <div class="transaction-detail-label">Status</div>
+                        <div class="transaction-detail-value">
+                            <span class="px-2 py-1 rounded-full text-xs font-semibold ${transaction.status === 'completed' ? 'bg-green-900 text-green-300' : 'bg-yellow-900 text-yellow-300'}">
+                                ${transaction.status.toUpperCase()}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="transaction-detail-item">
+                        <div class="transaction-detail-label">Date & Time</div>
+                        <div class="transaction-detail-value">${transaction.date}</div>
+                    </div>
+                </div>
+            `;
+            transactionModal.classList.remove('hidden');
+            setTimeout(() => lucide.createIcons(), 0);
+        }
+
+        // Your exact render functions converted to vanilla JS
+        function renderHome() {
+            const verified = state.accounts.filter(a => a.status === 'verified').length;
+            const pending = state.accounts.filter(a => a.status === 'pending').length;
+            const rejected = state.accounts.filter(a => a.status === 'rejected').length;
+            const runningAccounts = state.accounts.filter(a => a.running).length;
+
+            document.getElementById('home-page').innerHTML = `
+                <div class="space-y-6">
+                    <div class="bg-yellow-500/10 border-2 border-yellow-500 rounded-lg p-3 mb-4">
+                        <p class="text-yellow-500 text-center font-semibold text-sm">⚠️ You are in DEMO MODE - Kindly activate XPay to avail all features</p>
+                    </div>
+
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold text-white">Dashboard Overview</h2>
+                        <div class="flex gap-3">
+                            <button id="show-bulk-add" class="bg-purple-600 hover:bg-purple-700 text-white px-3 py-2 rounded-lg flex items-center gap-2 transition-colors text-sm">
+                                <i data-lucide="upload"></i>
+                                <span>Bulk Add</span>
+                            </button>
+                            <button id="show-add-account" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-lg flex items-center gap-2 transition-colors text-sm">
+                                <i data-lucide="plus"></i>
+                                <span>Add Account</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 md:grid-cols-5 gap-3 mb-6">
+                        <div class="from-green-600 rounded-lg p-4 shadow-lg">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-green-100 text-xs">Verified</p>
+                                    <p class="text-2xl font-bold text-white mt-1">${verified}</p>
+                                </div>
+                                <i data-lucide="check-circle" class="text-white opacity-80" width="28" height="28"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="from-yellow-600 rounded-lg p-4 shadow-lg">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-yellow-100 text-xs">Pending</p>
+                                    <p class="text-2xl font-bold text-white mt-1">${pending}</p>
+                                </div>
+                                <i data-lucide="clock" class="text-white opacity-80" width="28" height="28"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="from-red-600 rounded-lg p-4 shadow-lg">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-red-100 text-xs">Rejected</p>
+                                    <p class="text-2xl font-bold text-white mt-1">${rejected}</p>
+                                </div>
+                                <i data-lucide="x-circle" class="text-white opacity-80" width="28" height="28"></i>
+                            </div>
+                        </div>
+
+                        <div class="from-blue-600 rounded-lg p-4 shadow-lg">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-blue-100 text-xs">Running AC</p>
+                                    <p class="text-2xl font-bold text-white mt-1">${runningAccounts}</p>
+                                </div>
+                                <i data-lucide="check-circle" class="text-white opacity-80" width="28" height="28"></i>
+                            </div>
+                        </div>
+
+                        <div class="from-emerald-600 rounded-lg p-4 shadow-lg">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-emerald-100 text-xs">Commission</p>
+                                    <p class="text-xl font-bold text-white mt-1">₹15L</p>
+                                </div>
+                                <i data-lucide="dollar-sign" class="text-white opacity-80" width="28" height="28"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    ${state.showAddAccount ? `
+                    <div class="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
+                        <div class="bg-gray-800 rounded-xl p-6 w-full max-w-md border border-gray-700">
+                            <h3 class="text-xl font-bold text-white mb-4">Add Bank Account</h3>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-gray-300 mb-2 text-sm">User ID</label>
+                                    <input type="text" id="new-user-id" value="${state.newAccount.userId}" class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" placeholder="Enter User ID">
+                                </div>
+                                <div>
+                                    <label class="block text-gray-300 mb-2 text-sm">Bank Name</label>
+                                    <input type="text" id="new-bank" value="${state.newAccount.bank}" class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" placeholder="Enter Bank Name">
+                                </div>
+                                <div>
+                                    <label class="block text-gray-300 mb-2 text-sm">Account Number</label>
+                                    <input type="text" id="new-account-number" value="${state.newAccount.accountNumber}" class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" placeholder="Enter Account Number">
+                                </div>
+                                <div>
+                                    <label class="block text-gray-300 mb-2 text-sm">IFSC Code</label>
+                                    <input type="text" id="new-ifsc" value="${state.newAccount.ifsc}" class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" placeholder="Enter IFSC Code">
+                                </div>
+                                <div class="flex gap-3 mt-6">
+                                    <button id="add-account" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg transition-colors">Add Account</button>
+                                    <button id="cancel-add-account" class="flex-1 bg-gray-700 hover:bg-gray-600 text-white py-2 rounded-lg transition-colors">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    ` : ''}
+
+                    ${state.showBulkAdd ? `
+                    <div class="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
+                        <div class="bg-gray-800 rounded-xl p-6 w-full max-w-md border border-gray-700">
+                            <h3 class="text-xl font-bold text-white mb-4">Bulk Account Addition</h3>
+                            <div class="space-y-4">
+                                <div class="border-2 border-dashed border-gray-600 rounded-lg p-8 text-center">
+                                    <i data-lucide="upload" class="mx-auto text-gray-400 mb-3" width="48" height="48"></i>
+                                    <p class="text-gray-400 text-sm mb-2">Upload CSV or Excel file</p>
+                                    <p class="text-gray-500 text-xs">Format: UserID, Bank, Account Number, IFSC</p>
+                                    <button class="mt-4 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm transition-colors">Choose File</button>
+                                </div>
+                                <button id="close-bulk-add" class="w-full bg-gray-700 hover:bg-gray-600 text-white py-2 rounded-lg transition-colors">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                    ` : ''}
+
+                    <div class="bg-gray-800 rounded-xl shadow-lg border border-gray-700">
+                        <div class="p-6 border-b border-gray-700">
+                            <h3 class="text-xl font-semibold text-white">Bank Account Additions</h3>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table>
+                                <thead class="bg-gray-700">
+                                    <tr>
+                                        <th class="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">User ID</th>
+                                        <th class="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Bank</th>
+                                        <th class="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Account</th>
+                                        <th class="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Status</th>
+                                        <th class="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Date Added</th>
+                                        <th class="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${state.accounts.map(acc => `
+                                        <tr class="hover:bg-gray-750">
+                                            <td class="px-6 py-4 text-sm text-gray-300">${acc.userId}</td>
+                                            <td class="px-6 py-4 text-sm text-gray-300">${acc.bank}</td>
+                                            <td class="px-6 py-4 text-sm text-gray-300">${acc.accountNumber}</td>
+                                            <td class="px-6 py-4">
+                                                <span class="px-3 py-1 rounded-full text-xs font-semibold ${acc.status === 'verified' ? 'bg-green-900 text-green-300' : acc.status === 'pending' ? 'bg-yellow-900 text-yellow-300' : 'bg-red-900 text-red-300'}">
+                                                    ${acc.status.toUpperCase()}
+                                                </span>
+                                            </td>
+                                            <td class="px-6 py-4 text-sm text-gray-300">${acc.addedDate}</td>
+                                            <td class="px-6 py-4">
+                                                ${acc.status === 'pending' ? `
+                                                <button onclick="markAsVerified(${acc.id})" class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-xs font-semibold transition-colors">
+                                                    Mark Verified
+                                                </button>
+                                                ` : ''}
+                                            </td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Add event listeners
+            if (state.showAddAccount) {
+                document.getElementById('add-account').addEventListener('click', handleAddAccount);
+                document.getElementById('cancel-add-account').addEventListener('click', () => {
+                    state.showAddAccount = false;
+                    renderCurrentPage();
+                });
+            }
+
+            if (state.showBulkAdd) {
+                document.getElementById('close-bulk-add').addEventListener('click', () => {
+                    state.showBulkAdd = false;
+                    renderCurrentPage();
+                });
+            }
+
+            document.getElementById('show-add-account').addEventListener('click', () => {
+                state.showAddAccount = true;
+                renderCurrentPage();
+            });
+
+            document.getElementById('show-bulk-add').addEventListener('click', () => {
+                state.showBulkAdd = true;
+                renderCurrentPage();
+            });
+        }
+
+        function renderAPKConnections() {
+            const connected = state.apkUsers.filter(u => u.connected).length;
+            const teamMembers = state.apkUsers.filter(u => u.isTeam).length;
+
+            document.getElementById('apk-page').innerHTML = `
+                <div class="space-y-6">
+                    <div class="bg-yellow-500/10 border-2 border-yellow-500 rounded-lg p-3 mb-4">
+                        <p class="text-yellow-500 text-center font-semibold text-sm">⚠️ You are in DEMO MODE - Kindly activate XPay to avail all features</p>
+                    </div>
+
+                    <h2 class="text-2xl font-bold text-white mb-4">APK Connections</h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                        <div class="from-blue-600 rounded-lg p-4 shadow-lg">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-blue-100 text-xs">Connected Users</p>
+                                    <p class="text-2xl font-bold text-white mt-1">${connected}</p>
+                                </div>
+                                <i data-lucide="users" class="text-white opacity-80" width="36" height="36"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="from-purple-600 rounded-lg p-4 shadow-lg">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-purple-100 text-xs">Team Members</p>
+                                    <p class="text-2xl font-bold text-white mt-1">${teamMembers}</p>
+                                </div>
+                                <i data-lucide="user" class="text-white opacity-80" width="36" height="36"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-800 rounded-xl shadow-lg border border-gray-700">
+                        <div class="p-6 border-b border-gray-700">
+                            <h3 class="text-xl font-semibold text-white">User Connections</h3>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table>
+                                <thead class="bg-gray-700">
+                                    <tr>
+                                        <th class="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">User ID</th>
+                                        <th class="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Status</th>
+                                        <th class="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Last Active</th>
+                                        <th class="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Linked Account</th>
+                                        <th class="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Team Member</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${state.apkUsers.map(user => {
+                                        const linkedAcc = state.accounts.find(a => a.id === user.linkedAccount);
+                                        return `
+                                            <tr class="hover:bg-gray-750">
+                                                <td class="px-6 py-4 text-sm text-gray-300">${user.userId}</td>
+                                                <td class="px-6 py-4">
+                                                    <span class="px-3 py-1 rounded-full text-xs font-semibold ${user.connected ? 'bg-green-900 text-green-300' : 'bg-gray-700 text-gray-400'}">
+                                                        ${user.connected ? 'CONNECTED' : 'OFFLINE'}
+                                                    </span>
+                                                </td>
+                                                <td class="px-6 py-4 text-sm text-gray-300">${user.lastActive}</td>
+                                                <td class="px-6 py-4">
+                                                    <select onchange="linkAccountToUser('${user.userId}', this.value)" class="bg-gray-700 text-gray-300 px-3 py-1 rounded text-sm border border-gray-600">
+                                                        <option value="">Select Account</option>
+                                                        ${state.accounts.filter(a => a.status === 'pending').map(acc => `
+                                                            <option value="${acc.id}" ${user.linkedAccount === acc.id ? 'selected' : ''}>${acc.userId} - ${acc.bank}</option>
+                                                        `).join('')}
+                                                    </select>
+                                                    ${linkedAcc ? `
+                                                    <div class="text-xs text-gray-400 mt-1">${linkedAcc.bank} - ${linkedAcc.accountNumber}</div>
+                                                    ` : ''}
+                                                </td>
+                                                <td class="px-6 py-4">
+                                                    <button onclick="toggleTeamStatus(${user.id})" class="px-4 py-2 rounded-lg text-xs font-semibold transition-colors ${user.isTeam ? 'bg-purple-600 hover:bg-purple-700 text-white' : 'bg-gray-700 hover:bg-gray-600 text-gray-300'}">
+                                                        ${user.isTeam ? 'TEAM' : 'REGULAR'}
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        `;
+                                    }).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderDMRReport() {
+            const totalTransactions = state.transactions.reduce((sum, t) => sum + t.amount, 0);
+            const completedTransactions = state.transactions.filter(t => t.status === 'completed').length;
+
+            document.getElementById('dmr-page').innerHTML = `
+                <div class="space-y-6">
+                    <div class="bg-yellow-500/10 border-2 border-yellow-500 rounded-lg p-3 mb-4">
+                        <p class="text-yellow-500 text-center font-semibold text-sm">⚠️ You are in DEMO MODE - Kindly activate XPay to avail all features</p>
+                    </div>
+
+                    <h2 class="text-2xl font-bold text-white mb-4">DMR Report</h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                        <div class="from-indigo-600 rounded-lg p-4 shadow-lg">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-indigo-100 text-xs">Total Transactions</p>
+                                    <p class="text-2xl font-bold text-white mt-1">₹${(totalTransactions/1000).toFixed(0)}K</p>
+                                </div>
+                                <i data-lucide="file-text" class="text-white opacity-80" width="36" height="36"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="from-teal-600 rounded-lg p-4 shadow-lg">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-teal-100 text-xs">Completed</p>
+                                    <p class="text-2xl font-bold text-white mt-1">${completedTransactions}</p>
+                                </div>
+                                <i data-lucide="check-circle" class="text-white opacity-80" width="36" height="36"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-800 rounded-xl shadow-lg border border-gray-700">
+                        <div class="p-4 border-b border-gray-700">
+                            <h3 class="text-lg font-semibold text-white">Transaction History</h3>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table>
+                                <thead class="bg-gray-700">
+                                    <tr>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">TXN ID</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">User ID</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Bank</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Amount</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Type</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Credit/Debit</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Source</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">MQR Status</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Status</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Date & Time</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${state.transactions.map(txn => `
+                                        <tr class="hover:bg-gray-750 cursor-pointer" onclick="showTransactionDetails(${JSON.stringify(txn).replace(/"/g, '&quot;')})">
+                                            <td class="px-4 py-3 text-xs text-gray-300 font-mono">${txn.txnId}</td>
+                                            <td class="px-4 py-3 text-xs text-gray-300">${txn.userId}</td>
+                                            <td class="px-4 py-3 text-xs text-gray-300">${txn.bank}</td>
+                                            <td class="px-4 py-3 text-xs font-semibold text-blue-400">₹${txn.amount.toLocaleString()}</td>
+                                            <td class="px-4 py-3 text-xs text-gray-300">${txn.type}</td>
+                                            <td class="px-4 py-3">
+                                                <span class="px-2 py-1 rounded-full text-xs font-semibold ${txn.creditDebit === 'Credit' ? 'bg-green-900 text-green-300' : 'bg-red-900 text-red-300'}">
+                                                    ${txn.creditDebit}
+                                                </span>
+                                            </td>
+                                            <td class="px-4 py-3 text-xs text-gray-300">${txn.source}</td>
+                                            <td class="px-4 py-3">
+                                                <span class="px-2 py-1 rounded-full text-xs font-semibold ${txn.mqr === 'With MQR' ? 'bg-purple-900 text-purple-300' : 'bg-gray-700 text-gray-300'}">
+                                                    ${txn.mqr}
+                                                </span>
+                                            </td>
+                                            <td class="px-4 py-3">
+                                                <span class="px-2 py-1 rounded-full text-xs font-semibold ${txn.status === 'completed' ? 'bg-green-900 text-green-300' : 'bg-yellow-900 text-yellow-300'}">
+                                                    ${txn.status.toUpperCase()}
+                                                </span>
+                                            </td>
+                                            <td class="px-4 py-3 text-xs text-gray-300">${txn.date}</td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderWithdrawals() {
+            const totalCommission = state.withdrawals.reduce((sum, w) => sum + w.commission, 0);
+            const pendingCommission = state.withdrawals.filter(w => w.status === 'pending').reduce((sum, w) => sum + w.commission, 0);
+
+            document.getElementById('withdrawals-page').innerHTML = `
+                <div class="space-y-6">
+                    <div class="bg-yellow-500/10 border-2 border-yellow-500 rounded-lg p-3 mb-4">
+                        <p class="text-yellow-500 text-center font-semibold text-sm">⚠️ You are in DEMO MODE - Kindly activate XPay to avail all features</p>
+                    </div>
+
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-2xl font-bold text-white">USDT Withdraw Commission</h2>
+                        <button id="show-withdraw-request" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors text-sm">
+                            <i data-lucide="dollar-sign"></i>
+                            <span>Request Withdrawal</span>
+                        </button>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                        <div class="from-emerald-600 rounded-lg p-4 shadow-lg">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-emerald-100 text-xs">Withdrawal Balance</p>
+                                    <p class="text-2xl font-bold text-white mt-1">₹${state.withdrawalBalance.toLocaleString()}</p>
+                                </div>
+                                <i data-lucide="dollar-sign" class="text-white opacity-80" width="36" height="36"></i>
+                            </div>
+                        </div>
+
+                        <div class="from-blue-600 rounded-lg p-4 shadow-lg">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-blue-100 text-xs">Total Commission</p>
+                                    <p class="text-2xl font-bold text-white mt-1">₹${totalCommission}</p>
+                                </div>
+                                <i data-lucide="check-circle" class="text-white opacity-80" width="36" height="36"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="from-orange-600 rounded-lg p-4 shadow-lg">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-orange-100 text-xs">Pending Commission</p>
+                                    <p class="text-2xl font-bold text-white mt-1">₹${pendingCommission}</p>
+                                </div>
+                                <i data-lucide="clock" class="text-white opacity-80" width="36" height="36"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    ${state.showWithdrawRequest ? `
+                    <div class="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
+                        <div class="bg-gray-800 rounded-xl p-6 w-full max-w-md border border-gray-700">
+                            <h3 class="text-xl font-bold text-white mb-4">Request Withdrawal Settlement</h3>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-gray-300 mb-2 text-sm">USDT Wallet Address</label>
+                                    <input type="text" id="usdt-wallet" value="${state.withdrawRequest.usdtWallet}" class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" placeholder="Enter USDT Wallet Address">
+                                </div>
+                                <div>
+                                    <label class="block text-gray-300 mb-2 text-sm">Withdrawal Amount (₹)</label>
+                                    <input type="number" id="withdraw-amount" value="${state.withdrawRequest.amount}" class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white" placeholder="Enter Amount" max="${state.withdrawalBalance}">
+                                    <p class="text-xs text-gray-400 mt-1">Available Balance: ₹${state.withdrawalBalance.toLocaleString()}</p>
+                                </div>
+                                <div class="flex gap-3 mt-6">
+                                    <button id="submit-withdraw" class="flex-1 bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg transition-colors">Submit Request</button>
+                                    <button id="cancel-withdraw" class="flex-1 bg-gray-700 hover:bg-gray-600 text-white py-2 rounded-lg transition-colors">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    ` : ''}
+
+                    <div class="bg-gray-800 rounded-xl shadow-lg border border-gray-700">
+                        <div class="p-4 border-b border-gray-700">
+                            <h3 class="text-lg font-semibold text-white">Withdrawal History</h3>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table>
+                                <thead class="bg-gray-700">
+                                    <tr>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">User ID</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Amount</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Commission</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Status</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${state.withdrawals.map(withdrawal => `
+                                        <tr class="hover:bg-gray-750">
+                                            <td class="px-4 py-3 text-xs text-gray-300">${withdrawal.userId}</td>
+                                            <td class="px-4 py-3 text-xs text-gray-300">₹${withdrawal.amount}</td>
+                                            <td class="px-4 py-3 text-xs font-semibold text-green-400">₹${withdrawal.commission}</td>
+                                            <td class="px-4 py-3">
+                                                <span class="px-2 py-1 rounded-full text-xs font-semibold ${withdrawal.status === 'completed' ? 'bg-green-900 text-green-300' : 'bg-yellow-900 text-yellow-300'}">
+                                                    ${withdrawal.status.toUpperCase()}
+                                                </span>
+                                            </td>
+                                            <td class="px-4 py-3 text-xs text-gray-300">${withdrawal.date}</td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('show-withdraw-request').addEventListener('click', () => {
+                state.showWithdrawRequest = true;
+                renderCurrentPage();
+            });
+
+            if (state.showWithdrawRequest) {
+                document.getElementById('submit-withdraw').addEventListener('click', handleWithdrawRequest);
+                document.getElementById('cancel-withdraw').addEventListener('click', () => {
+                    state.showWithdrawRequest = false;
+                    renderCurrentPage();
+                });
+            }
+        }
+
+        function renderProfiler() {
+            document.getElementById('profile-page').innerHTML = `
+                <div class="space-y-6">
+                    <div class="bg-yellow-500/10 border-2 border-yellow-500 rounded-lg p-3 mb-4">
+                        <p class="text-yellow-500 text-center font-semibold text-sm">⚠️ You are in DEMO MODE - Kindly activate XPay to avail all features</p>
+                    </div>
+
+                    <h2 class="text-2xl font-bold text-white mb-4">Admin Profile</h2>
+                    
+                    <div class="bg-gray-800 rounded-xl shadow-lg border border-gray-700 p-8">
+                        <div class="flex items-center gap-6 mb-8">
+                            <div class="w-24 h-24 from-blue-500 rounded-full flex items-center justify-center">
+                                <i data-lucide="user" class="text-white" width="48" height="48"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-2xl font-bold text-white">Administrator</h3>
+                                <p class="text-gray-400">admin@xpay.com</p>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="bg-gray-750 rounded-lg p-4 border border-gray-700">
+                                <p class="text-gray-400 text-sm mb-1">Username</p>
+                                <p class="text-white font-semibold">admin</p>
+                            </div>
+                            
+                            <div class="bg-gray-750 rounded-lg p-4 border border-gray-700">
+                                <p class="text-gray-400 text-sm mb-1">Role</p>
+                                <p class="text-white font-semibold">Super Admin</p>
+                            </div>
+                            
+                            <div class="bg-gray-750 rounded-lg p-4 border border-gray-700">
+                                <p class="text-gray-400 text-sm mb-1">Last Login</p>
+                                <p class="text-white font-semibold">Today, 10:30 AM</p>
+                            </div>
+                            
+                            <div class="bg-gray-750 rounded-lg p-4 border border-gray-700">
+                                <p class="text-gray-400 text-sm mb-1">Access Level</p>
+                                <p class="text-white font-semibold">Full Access</p>
+                            </div>
+                        </div>
+
+                        <div class="mt-8 p-4 bg-blue-900/20 border border-blue-700 rounded-lg">
+                            <h4 class="text-white font-semibold mb-2">System Permissions</h4>
+                            <div class="space-y-2">
+                                <div class="flex items-center">
+                                    <i data-lucide="check-circle" class="text-green-400 mr-2" width="16" height="16"></i>
+                                    <span class="text-gray-300 text-sm">Manage Bank Accounts</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i data-lucide="check-circle" class="text-green-400 mr-2" width="16" height="16"></i>
+                                    <span class="text-gray-300 text-sm">View APK Connections</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i data-lucide="check-circle" class="text-green-400 mr-2" width="16" height="16"></i>
+                                    <span class="text-gray-300 text-sm">Process Withdrawals</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i data-lucide="check-circle" class="text-green-400 mr-2" width="16" height="16"></i>
+                                    <span class="text-gray-300 text-sm">System Configuration</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Your exact helper functions
+        function handleWithdrawRequest() {
+            const usdtWallet = document.getElementById('usdt-wallet').value;
+            const amount = document.getElementById('withdraw-amount').value;
+            
+            if (usdtWallet && amount) {
+                alert(`Withdrawal request submitted!\nUSDT Wallet: ${usdtWallet}\nAmount: ₹${amount}`);
+                state.withdrawRequest = { usdtWallet: '', amount: '' };
+                state.showWithdrawRequest = false;
+                renderCurrentPage();
+            }
+        }
+
+        function handleAddAccount() {
+            const userId = document.getElementById('new-user-id').value;
+            const bank = document.getElementById('new-bank').value;
+            
+            if (userId && bank) {
+                const account = {
+                    id: state.accounts.length + 1,
+                    userId: userId,
+                    bank: bank,
+                    status: 'pending',
+                    addedDate: 'Today',
+                    accountNumber: '****' + Math.floor(1000 + Math.random() * 9000),
+                    running: false
+                };
+                state.accounts.push(account);
+                state.newAccount = { userId: '', bank: '', accountNumber: '', ifsc: '' };
+                state.showAddAccount = false;
+                renderCurrentPage();
+            }
+        }
+
+        function markAsVerified(id) {
+            state.accounts = state.accounts.map(acc => 
+                acc.id === id ? { ...acc, status: 'verified', running: true } : acc
+            );
+            renderCurrentPage();
+        }
+
+        function toggleTeamStatus(id) {
+            state.apkUsers = state.apkUsers.map(user => 
+                user.id === id ? { ...user, isTeam: !user.isTeam } : user
+            );
+            renderCurrentPage();
+        }
+
+        function linkAccountToUser(userId, accountId) {
+            state.apkUsers = state.apkUsers.map(user => 
+                user.userId === userId ? { ...user, linkedAccount: parseInt(accountId) } : user
+            );
+            renderCurrentPage();
+        }
+
+        // Initialize
+        renderCurrentPage();
+    </script>
+</body>
+</html>
