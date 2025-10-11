@@ -245,6 +245,204 @@
             color: white;
             font-weight: 500;
         }
+        /* Add these mobile-specific styles at the end of your existing CSS */
+
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
+  /* Layout adjustments */
+  .flex {
+    flex-direction: column;
+  }
+  
+  /* Sidebar becomes top bar on mobile */
+  #sidebar {
+    width: 100% !important;
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid #374151;
+  }
+  
+  .sidebar-collapsed #sidebar {
+    width: 100% !important;
+  }
+  
+  .sidebar-collapsed .sidebar-text {
+    opacity: 1;
+    width: auto;
+    overflow: visible;
+  }
+  
+  /* Main content spacing */
+  .p-8 {
+    padding: 1rem;
+  }
+  
+  /* Grid adjustments */
+  .grid-cols-2,
+  .md\:grid-cols-2,
+  .md\:grid-cols-3,
+  .md\:grid-cols-5 {
+    grid-template-columns: 1fr;
+  }
+  
+  /* Table improvements for mobile */
+  table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+  
+  thead, tbody, tr, th, td {
+    display: block;
+  }
+  
+  thead {
+    display: none;
+  }
+  
+  tbody tr {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+    padding: 1rem;
+    border: 1px solid #374151;
+    border-radius: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  tbody td {
+    padding: 0.25rem 0;
+    border: none;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  tbody td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    font-size: 0.75rem;
+    color: #9ca3af;
+    margin-bottom: 0.25rem;
+  }
+  
+  /* Modal adjustments */
+  .max-w-md,
+  .max-w-2xl {
+    margin: 1rem;
+    width: calc(100% - 2rem);
+  }
+  
+  /* Button groups stack vertically */
+  .flex.gap-3 {
+    flex-direction: column;
+    gap: 0.5rem !important;
+  }
+  
+  /* Transaction details grid */
+  .transaction-details-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  /* Hide sidebar toggle on mobile since sidebar is always visible */
+  #sidebar-toggle {
+    display: none;
+  }
+  
+  /* Profile layout adjustments */
+  .flex.items-center.gap-6 {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  /* Card padding reduction */
+  .p-4, .p-6 {
+    padding: 0.75rem;
+  }
+  
+  /* Text size adjustments */
+  .text-2xl {
+    font-size: 1.25rem;
+  }
+  
+  .text-4xl {
+    font-size: 1.5rem;
+  }
+}
+
+/* Very small mobile devices */
+@media (max-width: 480px) {
+  .p-8 {
+    padding: 0.5rem;
+  }
+  
+  .text-xl {
+    font-size: 1.125rem;
+  }
+  
+  .text-2xl {
+    font-size: 1.125rem;
+  }
+  
+  /* Transaction table cells */
+  tbody tr {
+    grid-template-columns: 1fr;
+  }
+  
+  /* Button text sizing */
+  button {
+    font-size: 0.875rem;
+  }
+  
+  /* Reduce padding in cards */
+  .p-4 {
+    padding: 0.5rem;
+  }
+  
+  .p-6 {
+    padding: 1rem;
+  }
+}
+
+/* Touch-friendly improvements */
+@media (hover: none) and (pointer: coarse) {
+  /* Larger touch targets */
+  button, 
+  [data-page],
+  tbody tr {
+    min-height: 44px;
+  }
+  
+  /* Padding for touch */
+  .px-4, .px-6 {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+  .py-3, .py-4 {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+  
+  /* Remove hover effects on touch devices */
+  .hover\:bg-blue-700:hover,
+  .hover\:bg-purple-700:hover,
+  .hover\:bg-green-700:hover,
+  .hover\:bg-gray-700:hover,
+  .hover\:bg-gray-600:hover,
+  .hover\:bg-gray-750:hover,
+  .hover\:bg-red-900\/20:hover,
+  .hover\:text-white:hover {
+    background-color: inherit;
+    color: inherit;
+  }
+}
+
+/* Add data labels for mobile table cells */
+
+}
+
+// Call this after rendering any table
+setTimeout(addMobileTableLabels, 100);
     </style>
 </head>
 <body>
@@ -1186,6 +1384,18 @@
             );
             renderCurrentPage();
         }
+
+        function addMobileTableLabels() {
+  document.querySelectorAll('tbody tr').forEach(row => {
+    const cells = row.querySelectorAll('td');
+    const headers = document.querySelectorAll('thead th');
+    
+    cells.forEach((cell, index) => {
+      if (headers[index]) {
+        cell.setAttribute('data-label', headers[index].textContent);
+      }
+    });
+  });
 
         // Initialize
         renderCurrentPage();
